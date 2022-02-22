@@ -1,0 +1,46 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="smartcabinet_server:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/smartcabinet_server_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="smartcabinet_server" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/smartcabinet_server/web/WEB-INF/lib/mysql-connector-java-5.1.49-bin.jar" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.49-bin" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/el-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/jasper.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/jsp-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/catalina.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/ecj-4.6.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/jasper-el.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/jaspic-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-jni.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/catalina-ha.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/servlet-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-dbcp.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-jdbc.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-util.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/catalina-ant.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-coyote.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/websocket-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-de.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-es.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-fr.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-ja.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-ko.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-ru.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/annotations-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/catalina-tribes.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-util-scan.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-websocket.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/tomcat-i18n-zh-CN.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../../tomcat/apache-tomcat-8.5.75/lib/catalina-storeconfig.jar" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="smartcabinet_server/web/Web" />
+    </root>
+  </artifact>
+</component>
