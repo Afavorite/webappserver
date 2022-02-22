@@ -47,11 +47,11 @@ public class UserDAo {
         PreparedStatement preparedStatement = null;
         try {
             connection = JdbcUtils.getconn();
-            String sql = "insert into user(stu_id,password)values(?,?);";
+            String sql = "insert into users(stu_id,password) values(?,?);";
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
 //            preparedStatement.setInt(1,user.getId());
-            preparedStatement.setString(2,user.getName());
-            preparedStatement.setString(3,user.getPassword());
+            preparedStatement.setString(1,user.getName());
+            preparedStatement.setString(2,user.getPassword());
 //            preparedStatement.setInt(4,user.getRole());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

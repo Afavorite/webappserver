@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <td>密码：</td>
-                <td><input type="text" name="password" size="21"/></td>
+                <td><input type="password" name="password" size="21"/></td>
             </tr>
 
         </table>
