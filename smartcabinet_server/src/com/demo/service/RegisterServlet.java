@@ -26,6 +26,7 @@ public class RegisterServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String username = request.getParameter("name");
         String password = request.getParameter("password");
+        String conf_password = request.getParameter("conf_password");
 
         User user = new User();
         user.setName(username);
@@ -34,5 +35,6 @@ public class RegisterServlet extends HttpServlet {
         userDAo.addUser(user);
         System.out.println("注册成功");
         request.getRequestDispatcher("Login.jsp").forward(request,response);
+
     }
 }

@@ -24,21 +24,60 @@
             <caption>用户注册</caption>
             <tr>
                 <td>登录名：</td>
-                <td><input name="name" type="text" size="20"></td>
+                <td><input id="name" name="name" type="text" size="20"
+                           placeholder="输入10位数字学号"
+                           onkeyup="checkname()"
+                           onkeydown="value = value.replace(/[^\d]/g,'') "
+                           onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"></td>
+                <td><span id="tishi1"></span></td>
             </tr>
             <tr>
-                <td>密码:</td>
-                <td><input name="password" type="password" size="20"></td>
+                <td>输入密码:</td>
+                <td><input id="password" name="password" type="password" size="20"></td>
+                <td><span id="tishi2"></span></td>
+            </tr>
+            <tr>
+                <td>确认密码:</td>
+                <td><input id="conf_password" name="conf_password" type="password" size="20" placeholder="确认密码" onkeyup="checkpassword()"></td>
+                <td><span id="tishi3"></span></td>
+            </td>
+            </tr>
             </tr>
         </table>
-        <input type="submit" value="注册">
+        <input id="submit" type="submit" value="注册">
         <input type="reset" value="重置">
     </form>
     <br>
     <a href="Login.jsp">登录</a>
     </form>
 </div>
-
 </body>
 </html>
+
+<script type="text/javascript">
+    function checkname() {
+        const stu_id = document.getElementById("name").value;
+        if (stu_id.length == 10){
+            document.getElementById("tishi1").innerHTML="<br><font color='green'>输入的学号不为10位</font>";
+            document.getElementById("submit").disabled = false;
+        }
+        else {
+            document.getElementById("tishi1").innerHTML="<br><font color='red'>两次输入密码不一致!</font>";
+            document.getElementById("submit").disabled = true;
+        }
+    }
+    function checkpassword() {
+        const password = document.getElementById("password").value;
+        const repassword = document.getElementById("conf_password").value;
+
+        if(password == repassword) {
+            document.getElementById("tishi3").innerHTML="<br><font color='green'>两次密码输入一致</font>";
+            document.getElementById("submit").disabled = false;
+
+        }else {
+            document.getElementById("tishi3").innerHTML="<br><font color='red'>两次输入密码不一致!</font>";
+            document.getElementById("submit").disabled = true;
+        }
+    }
+</script>
 
