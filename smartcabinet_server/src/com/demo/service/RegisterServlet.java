@@ -24,16 +24,12 @@ public class RegisterServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         //PrintWriter out = response.getWriter();
         response.setContentType("text/html;charset=UTF-8");
-//        int id = Integer.valueOf(request.getParameter("id"));
         String username = request.getParameter("name");
         String password = request.getParameter("password");
-//        int role = Integer.valueOf(request.getParameter("role"));
 
         User user = new User();
-//        user.setId(id);
         user.setName(username);
         user.setPassword(password);
-//        user.setRole(role);
         UserDAo userDAo = new UserDAo();
         userDAo.addUser(user);
         System.out.println("注册成功");

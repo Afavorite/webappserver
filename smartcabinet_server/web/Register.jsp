@@ -22,10 +22,6 @@
     <form action="${pageContext.request.contextPath}/RegisterServlet" method="post">
         <table style="margin-left:40%">
             <caption>用户注册</caption>
-<%--            <tr>--%>
-<%--                <td>ID:</td>--%>
-<%--                <td><input name="id" type="text" size="20"></td>--%>
-<%--            </tr>--%>
             <tr>
                 <td>登录名：</td>
                 <td><input name="name" type="text" size="20"></td>
@@ -34,10 +30,6 @@
                 <td>密码:</td>
                 <td><input name="password" type="password" size="20"></td>
             </tr>
-<%--            <tr>--%>
-<%--                <td>角色:</td>--%>
-<%--                <td><input name="role" type="text" size="20"></td>--%>
-<%--            </tr>--%>
         </table>
         <input type="submit" value="注册">
         <input type="reset" value="重置">
