@@ -30,10 +30,10 @@ public class RegisterServlet extends HttpServlet {
         int role = Integer.valueOf(request.getParameter("role"));
 
         User user = new User();
-        user.setId(id);
+//        user.setId(id);
         user.setName(username);
         user.setPassword(password);
-        user.setRole(role);
+//        user.setRole(role);
         UserDAo userDAo = new UserDAo();
         userDAo.addUser(user);
         System.out.println("注册成功");

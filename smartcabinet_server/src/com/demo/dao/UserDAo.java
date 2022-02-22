@@ -18,7 +18,7 @@ public class UserDAo {
 
         try {
             connection = JdbcUtils.getconn();
-            String sql = "select * from users where stu_id=? and password=?";
+            String sql = "select * from users where stu_id=? and password=?;";
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
             preparedStatement.setString(1,username);
             preparedStatement.setString(2,password);
@@ -47,12 +47,12 @@ public class UserDAo {
         PreparedStatement preparedStatement = null;
         try {
             connection = JdbcUtils.getconn();
-            String sql = "insert into user(id,name,password,role)values(?,?,?,?);";
+            String sql = "insert into user(stu_id,password)values(?,?);";
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
-            preparedStatement.setInt(1,user.getId());
+//            preparedStatement.setInt(1,user.getId());
             preparedStatement.setString(2,user.getName());
             preparedStatement.setString(3,user.getPassword());
-            preparedStatement.setInt(4,user.getRole());
+//            preparedStatement.setInt(4,user.getRole());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
