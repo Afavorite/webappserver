@@ -62,4 +62,74 @@ public class UserDAo {
 
     }
 
+    //android_login
+    public boolean isuserlogin(String id,String password){
+        boolean isValid = false;
+        String drv = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/smartcabinet";
+        String usr = "root";
+        String pwd = "Lkw121731";
+        String sql="select * from users where stu_id='"+id+"' and password='"+password+"'";
+        try{
+            Class.forName(drv).newInstance();
+            Connection conn = DriverManager.getConnection(url,usr,pwd);
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+
+            if(rs.next()){
+                isValid = true;
+            }
+
+            rs.close();
+            stm.close();
+            conn.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+        if(isValid){//判断用户名以及密码是否与设定相符
+            return true;
+        }
+        else return false;
+    }
+
+    //android_register
+    public boolean userregister(String id,String password){
+
+        boolean b = false;
+        String drv = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/smartcabinet";
+        String usr = "root";
+        String pwd = "Lkw121731";
+        String sql = "select * from users where stu_id='"+id+"'";
+
+        try{
+            Class.forName(drv).newInstance();
+            Connection conn = DriverManager.getConnection(url,usr,pwd);
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery(sql);
+
+            if(!rs.next()){
+
+                sql = "insert into users(stu_id,password) values('"+id+"','"+password+"')";
+                stm.execute(sql);
+                b = true;
+            }
+
+            rs.close();
+            stm.close();
+            conn.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e);
+        }
+
+        if(b)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+
 }
