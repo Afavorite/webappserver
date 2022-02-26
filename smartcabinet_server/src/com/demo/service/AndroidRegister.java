@@ -27,13 +27,14 @@ public class AndroidRegister extends HttpServlet {
 
         String id=request.getParameter("id");
         String password=request.getParameter("password");
+
         User user = new User();
         user.setName(id);
         user.setPassword(password);
 
         String result = "";
 
-        b=userDAo.userregister(id,password);//连接数据库，插入该用户信息
+        b=userDAo.register(user);//连接数据库，插入该用户信息
 
         PrintWriter out = response.getWriter();//回应请求
         if(b){

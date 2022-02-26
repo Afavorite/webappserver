@@ -23,7 +23,10 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         UserDAo userDAo = new UserDAo();
-        User user = userDAo.login(username,password);
+        User u = new User();//新建user，填入信息
+        u.setName(username);
+        u.setPassword(password);
+        User user = userDAo.login(u);
         if(user != null){
             request.getRequestDispatcher("success.jsp").forward(request,response);
         }

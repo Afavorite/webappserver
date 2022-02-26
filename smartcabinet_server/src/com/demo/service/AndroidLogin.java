@@ -19,7 +19,12 @@ public class AndroidLogin extends HttpServlet {
         String password = request.getParameter("password");
         String result = "";
         UserDAo userDAo = new UserDAo();
-        User user = userDAo.login(username,password);
+
+        User u = new User();//新建user，填入信息
+        u.setName(username);
+        u.setPassword(password);
+
+        User user = userDAo.login(u);
         PrintWriter out = response.getWriter();//回应请求
         if(user != null){
             result = "success";

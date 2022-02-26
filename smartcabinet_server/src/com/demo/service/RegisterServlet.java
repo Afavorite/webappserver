@@ -32,7 +32,7 @@ public class RegisterServlet extends HttpServlet {
         user.setName(username);
         user.setPassword(password);
         UserDAo userDAo = new UserDAo();
-        boolean flag = userDAo.addUser(user);
+        boolean flag = userDAo.register(user);
         if (flag && !user.getName().equals(null)){
             System.out.println("注册成功");
             request.getRequestDispatcher("Login.jsp").forward(request,response);
