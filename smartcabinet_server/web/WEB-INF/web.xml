@@ -26,7 +26,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AndroidLogin</servlet-name>
-        <url-pattern>/androidlogin.do</url-pattern>
+        <url-pattern>/androidlogin</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -35,6 +35,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>AndroidRegister</servlet-name>
-        <url-pattern>/androidregister.do</url-pattern>
+        <url-pattern>/androidregister</url-pattern>
     </servlet-mapping>
 </web-app>
