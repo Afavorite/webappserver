@@ -13,27 +13,18 @@ import java.io.PrintWriter;
 public class AndroidLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        doGet(request, response);
-
-        //设置客户端的解码方式为utf-8
-        response.setContentType("text/html;charset=utf-8");
-        //
-        response.setCharacterEncoding("UTF-8");
-
-        boolean b=false;
-        UserDAo userDAo = new UserDAo();
-
-        //根据标示名获取JSP文件中表单所包含的参数
-        String id=request.getParameter("id");
-        String password=request.getParameter("password");
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        String username = request.getParameter("id");
+        String password = request.getParameter("password");
         String result = "";
-
-        b=userDAo.isuserlogin(id,password);//使用模型对账号和密码进行验证，返回一个boolean类型的对象
+        UserDAo userDAo = new UserDAo();
+        User user = userDAo.login(username,password);
         PrintWriter out = response.getWriter();//回应请求
-        if(b){  //如果验证结果为真，跳转至登录成功页面
+        if(user != null){
             result = "success";
         }
-        else {  //如果验证结果为假，跳转至登录失败页面
+        else {
             result = "fail";
         }
         out.write(result);

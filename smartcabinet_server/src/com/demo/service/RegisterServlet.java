@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.demo.bean.User;
 import com.demo.dao.UserDAo;
+import sun.util.resources.cldr.ar.CalendarData_ar_MA;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,15 +27,21 @@ public class RegisterServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String username = request.getParameter("name");
         String password = request.getParameter("password");
-        String conf_password = request.getParameter("conf_password");
 
         User user = new User();
         user.setName(username);
         user.setPassword(password);
         UserDAo userDAo = new UserDAo();
-        userDAo.addUser(user);
-        System.out.println("注册成功");
-        request.getRequestDispatcher("Login.jsp").forward(request,response);
+        boolean flag = userDAo.addUser(user);
+        if (flag && !user.getName().equals(null)){
+            System.out.println("注册成功");
+            request.getRequestDispatcher("Login.jsp").forward(request,response);
+        }
+        else{
+            System.out.println("注册失败");
+            request.getRequestDispatcher("defeat.jsp").forward(request,response);
+        }
+
 
     }
 }

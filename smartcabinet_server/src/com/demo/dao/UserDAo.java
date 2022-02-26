@@ -42,56 +42,65 @@ public class UserDAo {
     }
 
     //此方法实现注册功能，向数据库中写入新用户的信息
-    public void addUser(User user){
+    public boolean addUser(User user){
+        boolean flag = false;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         try {
-            connection = JdbcUtils.getconn();
-            String sql = "insert into users(stu_id,password) values(?,?);";
+            connection = JdbcUtils.getconn();//连接数据库
+
+            String sql = "select * from users where stu_id=?;"; //判断注册的账号是否重复
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
-//            preparedStatement.setInt(1,user.getId());
             preparedStatement.setString(1,user.getName());
-            preparedStatement.setString(2,user.getPassword());
-//            preparedStatement.setInt(4,user.getRole());
-            preparedStatement.executeUpdate();
+            resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()){
+                flag = true;
+                sql = "insert into users(stu_id,password) values(?,?);";
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
+                preparedStatement.setString(1,user.getName());
+                preparedStatement.setString(2,user.getPassword());
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
             JdbcUtils.close(preparedStatement,connection);
         }
-
+        return flag;
     }
 
     //android_login
-    public boolean isuserlogin(String id,String password){
-        boolean isValid = false;
-        String drv = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/smartcabinet";
-        String usr = "root";
-        String pwd = "Lkw121731";
-        String sql="select * from users where stu_id='"+id+"' and password='"+password+"'";
-        try{
-            Class.forName(drv).newInstance();
-            Connection conn = DriverManager.getConnection(url,usr,pwd);
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery(sql);
-
-            if(rs.next()){
-                isValid = true;
-            }
-
-            rs.close();
-            stm.close();
-            conn.close();
-        }catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e);
-        }
-        if(isValid){//判断用户名以及密码是否与设定相符
-            return true;
-        }
-        else return false;
-    }
+//    public boolean isuserlogin(String id,String password){
+//        boolean isValid = false;
+//        String drv = "com.mysql.jdbc.Driver";
+//        String url = "jdbc:mysql://localhost:3306/smartcabinet";
+//        String usr = "root";
+//        String pwd = "Lkw121731";
+//        String sql="select * from users where stu_id='"+id+"' and password='"+password+"'";
+//        try{
+//            Class.forName(drv).newInstance();
+//            Connection conn = DriverManager.getConnection(url,usr,pwd);
+//            Statement stm = conn.createStatement();
+//            ResultSet rs = stm.executeQuery(sql);
+//
+//            if(rs.next()){
+//                isValid = true;
+//            }
+//
+//            rs.close();
+//            stm.close();
+//            conn.close();
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println(e);
+//        }
+//        if(isValid){//判断用户名以及密码是否与设定相符
+//            return true;
+//        }
+//        else return false;
+//    }
 
     //android_register
     public boolean userregister(String id,String password){

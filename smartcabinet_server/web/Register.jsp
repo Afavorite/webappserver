@@ -47,7 +47,7 @@
             </tr>
         </table>
         <input id="submit" type="submit" value="注册">
-        <input type="reset" value="重置">
+        <input type="reset" value="重置" onkeyup="check()">
     </form>
     <br>
     <a href="Login.jsp">登录</a>

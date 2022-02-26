@@ -2,6 +2,8 @@ package com.demo.service;
 
 import com.demo.dao.UserDAo;
 import com.demo.bean.User;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import sun.rmi.runtime.NewThreadAction;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +27,9 @@ public class AndroidRegister extends HttpServlet {
 
         String id=request.getParameter("id");
         String password=request.getParameter("password");
+        User user = new User();
+        user.setName(id);
+        user.setPassword(password);
 
         String result = "";
 
