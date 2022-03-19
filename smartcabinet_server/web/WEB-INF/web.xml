@@ -37,4 +37,13 @@
         <servlet-name>AndroidRegister</servlet-name>
         <url-pattern>/androidregister</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetBoxInfo</servlet-name>
+        <servlet-class>com.demo.service.GetBoxInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetBoxInfo</servlet-name>
+        <url-pattern>/getboxinfo</url-pattern>
+    </servlet-mapping>
 </web-app>
