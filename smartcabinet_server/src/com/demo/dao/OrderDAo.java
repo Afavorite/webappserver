@@ -60,7 +60,7 @@ public class OrderDAo {
 
         try {
             connection = JdbcUtils.getconn();
-            String sql = "select * from box where box_status=?;";//查看计划预约的箱柜状态
+            String sql = "select box_number from box where box_status=?;";//获取空闲状态箱柜的列表
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
             preparedStatement.setString(1,"free");
             resultSet = preparedStatement.executeQuery();
