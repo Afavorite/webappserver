@@ -1,5 +1,7 @@
 package com.demo.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.demo.bean.Order;
 import com.demo.bean.User;
 import com.demo.dao.OrderDAo;
@@ -18,24 +20,25 @@ public class OrderAdd extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         //获取订单新建者，订单箱柜，使用开始时间，使用结束时间，订单设定温度，订单设定是否杀菌
-        String order_creator = request.getParameter("order_creator");
-        String order_box_number = request.getParameter("order_box_number");
-        String order_use_start_time = request.getParameter("order_use_start_time");
-        String order_use_end_time = request.getParameter("order_use_end_time");
-        String order_temp = request.getParameter("order_temp");
-        String order_sterilization = request.getParameter("order_sterilization");
+        String jsonstring = request.getParameter("jsonstring");
+//        String order_creator = request.getParameter("order_creator");
+//        String order_box_number = request.getParameter("order_box_number");
+//        String order_use_start_time = request.getParameter("order_use_start_time");
+//        String order_use_end_time = request.getParameter("order_use_end_time");
+//        String order_temp = request.getParameter("order_temp");
+//        String order_sterilization = request.getParameter("order_sterilization");
 
         String result = "";
 
         OrderDAo orderDAo = new OrderDAo();
 
-        Order o = new Order();
-        o.setOrder_creator(order_creator);
-        o.setOrder_box_number(order_box_number);
-        o.setOrder_use_start_time(order_use_start_time);
-        o.setOrder_use_end_time(order_use_end_time);
-        o.setOrder_temp(order_temp);
-        o.setOrder_sterilization(order_sterilization);
+        Order o = (Order) JSON.parseObject(jsonstring, Order.class);
+//        o.setOrder_creator(order_creator);
+//        o.setOrder_box_number(order_box_number);
+//        o.setOrder_use_start_time(order_use_start_time);
+//        o.setOrder_use_end_time(order_use_end_time);
+//        o.setOrder_temp(order_temp);
+//        o.setOrder_sterilization(order_sterilization);
 
         boolean flag = orderDAo.orderadd(o);
         PrintWriter out = response.getWriter();//回应请求

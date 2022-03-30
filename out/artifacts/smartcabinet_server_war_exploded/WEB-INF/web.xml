@@ -46,4 +46,12 @@
         <servlet-name>GetBoxInfo</servlet-name>
         <url-pattern>/getboxinfo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>OrderAdd</servlet-name>
+        <servlet-class>com.demo.service.OrderAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderAdd</servlet-name>
+        <url-pattern>/orderadd</url-pattern>
+    </servlet-mapping>
 </web-app>
