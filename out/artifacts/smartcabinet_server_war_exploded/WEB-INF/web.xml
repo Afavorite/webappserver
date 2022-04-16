@@ -54,4 +54,12 @@
         <servlet-name>OrderAdd</servlet-name>
         <url-pattern>/orderadd</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RPiServlet</servlet-name>
+        <servlet-class>com.demo.service.RPiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RPiServlet</servlet-name>
+        <url-pattern>/rpiservlet</url-pattern>
+    </servlet-mapping>
 </web-app>
