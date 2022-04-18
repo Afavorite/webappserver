@@ -19,17 +19,24 @@ public class RPiServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        String temp = request.getParameter("1010_temp");
+        String signal = request.getParameter("signal");
+        String temp = request.getParameter("temp");
+        String ster = request.getParameter("ster");
 
         Box box = new Box();
         box.setBox_temp(temp);
+        box.setBox_sterilization(ster);
+        if (signal.equals("with_lock")){
+            String lock = request.getParameter("lock");
+            box.setBox_lock(lock);
+        }
 
         OrderDAo orderDAo = new OrderDAo();
-        orderDAo.RPiBoxStatusUpdate(box);
+        orderDAo.RPiBoxStatusUpdate(box, signal);// 更新箱柜状态
 
-        JSONArray result = orderDAo.RPiGetOrder();
+        String result = orderDAo.RPiGetOrder(box, signal);
         PrintWriter out = response.getWriter();//回应请求
-        out.write(String.valueOf(result));
+        out.write(result);
         out.flush();
         out.close();
         System.out.println(result);
