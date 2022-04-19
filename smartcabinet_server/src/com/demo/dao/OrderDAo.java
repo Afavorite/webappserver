@@ -141,6 +141,7 @@ public class OrderDAo {
 
             RPi_Control rPiControl = new RPi_Control();
             if(resultSet.next()){// 查询到状态（order_status）为booking，unlock，using
+                // rPiControl.setControl_flag(resultSet.getString("order_status"));
                 String order_status = resultSet.getString("order_status");
                 String order_creator = resultSet.getString("order_creator");
                 String order_temp = resultSet.getString("order_temp");
@@ -150,18 +151,21 @@ public class OrderDAo {
                 rPiControl.setControl_flag(order_status);//指令写入flag标志
                 rPiControl.setControl_user(order_creator);
 
-                String sql1 = "select box_lock from box where box_number = ?";
+                String sql1 = "select box_lock from box where box_number = ?;";
                 preparedStatement = (PreparedStatement)connection.prepareStatement(sql1);//组装sql语句
                 preparedStatement.setString(1,"1010");
-                resultSet = preparedStatement.executeQuery();
-                if (resultSet.getString("box_lock").equals("unlock") && box.getBox_lock().equals("lock")){
-                    String sql2 = "update orders set order_status = ? where order_box_number = ? and order_status = ?;";
-                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql2);//组装sql语句
-                    preparedStatement.setString(1,"using");
-                    preparedStatement.setString(2,"1010");
-                    preparedStatement.setString(3,"unlock");
-                    preparedStatement.executeUpdate();
-                    rPiControl.setControl_flag("using");
+                ResultSet resultSet1 = preparedStatement.executeQuery();
+
+                if (resultSet1.next()) {
+                    if (resultSet1.getString("box_lock").equals("unlock") && box.getBox_lock().equals("lock")){
+                        String sql2 = "update orders set order_status = ? where order_box_number = ? and order_status = ?;";
+                        preparedStatement = (PreparedStatement)connection.prepareStatement(sql2);//组装sql语句
+                        preparedStatement.setString(1,"using");
+                        preparedStatement.setString(2,"1010");
+                        preparedStatement.setString(3,"unlock");
+                        preparedStatement.executeUpdate();
+                        rPiControl.setControl_flag("using");
+                    }
                 }
 
                 if (rPiControl.getControl_flag().equals("using")){
@@ -178,6 +182,7 @@ public class OrderDAo {
             else {
                 rPiControl.setControl_flag("finish");
             }
+
             json = JSON.toJSONString(rPiControl);
 
         } catch (SQLException e) {
