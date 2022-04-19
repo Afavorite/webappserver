@@ -102,30 +102,20 @@ public class OrderDAo {
         return array.toString();
     }
 
-    public void RPiBoxStatusUpdate(Box box, String signal){
+    public void RPiBoxStatusUpdate(Box box){
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
         try {
             connection = JdbcUtils.getconn();
-            if (signal.equals("with_lock")){
-                String sql = "update box set box_temp = ?, box_lock = ?, box_sterilization = ? where box_number = ?;";
-                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
-                preparedStatement.setString(1,box.getBox_temp());
-                preparedStatement.setString(2,box.getBox_lock());
-                preparedStatement.setString(3,box.getBox_sterilization());
-                preparedStatement.setString(4,"1010");
-                preparedStatement.executeUpdate();
-            }
-            else{
-                String sql = "update box set box_temp = ?, box_sterilization = ? where box_number = ?;";
-                preparedStatement = (PreparedStatement) connection.prepareStatement(sql);//组装sql语句
-                preparedStatement.setString(1, box.getBox_temp());
-                preparedStatement.setString(2, box.getBox_sterilization());
-                preparedStatement.setString(3, "1010");
-                preparedStatement.executeUpdate();
-            }
+            String sql = "update box set box_temp = ?, box_lock = ?, box_sterilization = ? where box_number = ?;";
+            preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+            preparedStatement.setString(1,box.getBox_temp());
+            preparedStatement.setString(2,box.getBox_lock());
+            preparedStatement.setString(3,box.getBox_sterilization());
+            preparedStatement.setString(4,"1010");
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -134,7 +124,7 @@ public class OrderDAo {
         }
     }
 
-    public String RPiGetOrder(Box box,String signal){
+    public String RPiGetOrder(Box box){
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -159,18 +149,14 @@ public class OrderDAo {
 
                 rPiControl.setControl_flag(order_status);//指令写入flag标志
                 rPiControl.setControl_user(order_creator);
-//                if (order_status.equals("booking")){
-//
-//                }
-//                if (order_status.equals("unlock")){
-//                    if (signal.equals("without_lock")){//没有收到锁的状态，表明锁未打开
-//                        rPiControl.setControl_lock("unlock");
-//                        rPiControl.setControl_temp("stop");
-//                        rPiControl.setControl_ster("off");
-//                    }
-                if (signal.equals("with_lock") && box.getBox_lock().equals("lock")){//收到锁的状态为lock，说明打开的锁又关闭了
-                    String sql1 = "update orders set order_status = ? where order_box_number = ? and order_status = ?;";
-                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql1);//组装sql语句
+
+                String sql1 = "select box_lock from box where box_number = ?";
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql1);//组装sql语句
+                preparedStatement.setString(1,"1010");
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.getString("box_lock").equals("unlock") && box.getBox_lock().equals("lock")){
+                    String sql2 = "update orders set order_status = ? where order_box_number = ? and order_status = ?;";
+                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql2);//组装sql语句
                     preparedStatement.setString(1,"using");
                     preparedStatement.setString(2,"1010");
                     preparedStatement.setString(3,"unlock");
