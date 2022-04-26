@@ -6,6 +6,7 @@ import com.demo.bean.Order;
 import com.demo.bean.RPi_Control;
 import com.demo.service.GetBoxInfo;
 import com.demo.utils.JdbcUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +31,7 @@ public class OrderDAo {
                 flag = true;
                 sql = "update box set box_status = ?, box_owner = ? where box_number = ?;";
                 preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
-                preparedStatement.setString(1,"booked");
+                preparedStatement.setString(1,"used");
                 preparedStatement.setString(2,order.getOrder_creator());
                 preparedStatement.setString(3,order.getOrder_box_number());
                 preparedStatement.executeUpdate();
@@ -75,6 +76,72 @@ public class OrderDAo {
             resultSet = preparedStatement.executeQuery();
             if(!resultSet.equals("")){
 
+                // 获取列数
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                // 遍历ResultSet中的每条数据
+                while (resultSet.next()) {
+                    JSONObject jsonObj = new JSONObject();
+
+                    // 遍历每一列
+                    for (int i = 1; i <= columnCount; i++) {
+                        String columnName =metaData.getColumnLabel(i);
+                        String value = resultSet.getString(columnName);
+                        jsonObj.put(columnName, value);
+                    }
+                    array.put(jsonObj);
+                }
+            }
+
+        } catch (SQLException | JSONException e) {
+            e.printStackTrace();
+        }
+        finally{
+            JdbcUtils.close(preparedStatement,connection);
+        }
+        return array.toString();
+    }
+
+    public String getorderinfo(String order_creator, String order_range){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        // json数组
+        JSONArray array = new JSONArray();
+
+        try {
+            connection = JdbcUtils.getconn();
+            if (order_range.equals("all")){
+                String sql = "select * from orders where order_creator = ?;";//获取空闲状态箱柜的列表
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,order_creator);
+                resultSet = preparedStatement.executeQuery();
+            }
+            else if (order_range.equals("booking")){
+                String sql = "select * from orders where order_creator = ? and order_status = ?;";//获取空闲状态箱柜的列表
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,order_creator);
+                preparedStatement.setString(2,"booking");
+                resultSet = preparedStatement.executeQuery();
+            }
+            else if (order_range.equals("using")){
+                String sql = "select * from orders where order_creator = ? and order_status in (?, ?);";//获取空闲状态箱柜的列表
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,order_creator);
+                preparedStatement.setString(2,"unlock");
+                preparedStatement.setString(3,"using");
+                resultSet = preparedStatement.executeQuery();
+            }
+            else if (order_range.equals("finish")){
+                String sql = "select * from orders where order_creator = ? and order_status = ?;";//获取空闲状态箱柜的列表
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,order_creator);
+                preparedStatement.setString(2,"finish");
+                resultSet = preparedStatement.executeQuery();
+            }
+
+            if(!resultSet.equals("")){
                 // 获取列数
                 ResultSetMetaData metaData = resultSet.getMetaData();
                 int columnCount = metaData.getColumnCount();
@@ -192,5 +259,48 @@ public class OrderDAo {
             JdbcUtils.close(preparedStatement,connection);
         }
         return json;
+    }
+
+    public String unlockcheck (com.alibaba.fastjson.JSONObject unlockcheck){
+        String box = unlockcheck.getString("box");
+        String user = unlockcheck.getString("user");
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        String result = "";
+
+        try {
+            connection = JdbcUtils.getconn();
+            String sql = "select order_number, order_status from orders where order_box_number = ? and order_creator = ? and order_status <> ?;";
+            preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+            preparedStatement.setString(1,box);
+            preparedStatement.setString(2,user);
+            preparedStatement.setString(3,"finish");
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                String order_number = resultSet.getString("order_number");
+                String order_status = resultSet.getString("order_status");
+                if (order_status.equals("unlock")) {
+                    result = "already unlock";//查询结果为unlock
+                }
+                else {//查询结果为booking，using
+                    sql = "update orders set order_status = ? where order_number = ?;";
+                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
+                    preparedStatement.setString(1,"unlock");
+                    preparedStatement.setString(2,order_number);
+                    preparedStatement.executeUpdate();
+                    result = "unlock";
+                }
+            }
+            else{//查询没有结果，说明为finish或者没有
+                result = "not exist";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally{
+            JdbcUtils.close(preparedStatement,connection);
+        }
+        return result;
     }
 }

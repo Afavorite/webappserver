@@ -62,4 +62,20 @@
         <servlet-name>RPiServlet</servlet-name>
         <url-pattern>/rpiservlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>UnlockCheck</servlet-name>
+        <servlet-class>com.demo.service.UnlockCheck</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UnlockCheck</servlet-name>
+        <url-pattern>/unlockcheck</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetOrderInfo</servlet-name>
+        <servlet-class>com.demo.service.GetOrderInfo</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetOrderInfo</servlet-name>
+        <url-pattern>/getorderinfo</url-pattern>
+    </servlet-mapping>
 </web-app>

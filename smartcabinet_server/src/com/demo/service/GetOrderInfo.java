@@ -12,17 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class GetBoxInfo extends HttpServlet {
+public class GetOrderInfo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
 
         String result;
-        String i = req.getParameter("req");
+        String order_creator = req.getParameter("order_creator");
+        String order_range = req.getParameter("order_range");
+
         OrderDAo orderDAo = new OrderDAo();
 
-        result = orderDAo.getboxinfo(i);
+        result = orderDAo.getorderinfo(order_creator, order_range);
         PrintWriter out = resp.getWriter();//回应请求
 
         out.write(result);
