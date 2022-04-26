@@ -10,12 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class UnlockCheck extends HttpServlet {
+public class UnlockCheck extends HttpServlet {// 手机扫码解锁
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html;charset=UTF-8");
-        //获取订单新建者，订单箱柜，使用开始时间，使用结束时间，订单设定温度，订单设定是否杀菌
         String unlockcheck = req.getParameter("unlockcheck");
 
         String result = "";
