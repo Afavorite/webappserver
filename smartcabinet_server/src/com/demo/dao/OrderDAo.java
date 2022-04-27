@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.json.JSONString;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 public class OrderDAo {
     public Boolean orderadd(Order order){
@@ -302,5 +303,79 @@ public class OrderDAo {
             JdbcUtils.close(preparedStatement,connection);
         }
         return result;
+    }
+
+    public Boolean FinishOrder(String order_number){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Boolean flag = false;
+
+        try {
+            connection = JdbcUtils.getconn();
+            String sql = "select order_status, order_box_number from orders where order_number = ?;";
+            preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+            preparedStatement.setString(1,order_number);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                String order_status = resultSet.getString("order_status");
+                String order_box_number = resultSet.getString("order_box_number");
+                if (order_status.equals("booking") || order_status.equals("using")) {
+                    sql = "update orders set order_status = ?, order_end_time = ? where order_number = ?;";
+                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                    preparedStatement.setString(1,"finish");
+                    java.util.Date date = new java.util.Date();
+                    SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    preparedStatement.setString(2,dateFormat.format(date));
+                    preparedStatement.setString(3,order_number);
+                    preparedStatement.executeUpdate();
+
+                    sql = "update box set box_status = ?, box_owner = ? where box_number = ?;";
+                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                    preparedStatement.setString(1,"free");
+                    preparedStatement.setString(2,null);
+                    preparedStatement.setString(3,order_box_number);
+                    preparedStatement.executeUpdate();
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally{
+            JdbcUtils.close(preparedStatement,connection);
+        }
+        return flag;
+    }
+
+    public Boolean DeleteOrder(String order_number){
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Boolean flag = false;
+
+        try {
+            connection = JdbcUtils.getconn();
+            String sql = "select order_status from orders where order_number = ?;";
+            preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+            preparedStatement.setString(1,order_number);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                String order_status = resultSet.getString("order_status");
+                if (order_status.equals("finish")) {
+                    sql = "delete from orders where order_number = ?";
+                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                    preparedStatement.setString(1,order_number);
+                    preparedStatement.executeUpdate();
+                    flag = true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally{
+            JdbcUtils.close(preparedStatement,connection);
+        }
+        return flag;
     }
 }
