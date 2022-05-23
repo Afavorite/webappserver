@@ -16,8 +16,8 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 
 public class OrderDAo {
-    public Boolean orderadd(Order order){
-        boolean flag = false;
+    public String orderadd(Order order){
+        String number = null;
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -29,7 +29,6 @@ public class OrderDAo {
             preparedStatement.setString(1,order.getOrder_box_number());
             resultSet = preparedStatement.executeQuery();
             if(resultSet.next() && resultSet.getString("box_status").equals("free")){
-                flag = true;
                 sql = "update box set box_status = ?, box_owner = ? where box_number = ?;";
                 preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
                 preparedStatement.setString(1,"used");
@@ -38,7 +37,8 @@ public class OrderDAo {
                 preparedStatement.executeUpdate();
                 sql = "insert into orders(order_number,order_creator,order_box_number,order_status,order_use_start_time,order_use_end_time,order_temp,order_sterilization,order_temp_switch) values (?,?,?,?,?,?,?,?,?);";
                 preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
-                preparedStatement.setString(1,String.valueOf(System.currentTimeMillis())+String.valueOf(order.getOrder_creator())+String.valueOf(order.getOrder_box_number()));
+                number = System.currentTimeMillis() +String.valueOf(order.getOrder_creator())+ order.getOrder_box_number();
+                preparedStatement.setString(1,number);
                 preparedStatement.setString(2,order.getOrder_creator());
                 preparedStatement.setString(3,order.getOrder_box_number());
                 preparedStatement.setString(4,"booking");
@@ -49,9 +49,11 @@ public class OrderDAo {
                 preparedStatement.setString(9,order.getOrder_temp_switch());
                 preparedStatement.executeUpdate();
                 System.out.println("新建订单成功");
+                
             }
             else{
                 System.out.println("创建订单失败，箱柜已被使用");
+                number = "fail";
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -59,7 +61,7 @@ public class OrderDAo {
         finally{
             JdbcUtils.close(preparedStatement,connection);
         }
-        return flag;
+        return number;
     }
 
     public String getboxinfo(String string){

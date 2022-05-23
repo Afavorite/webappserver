@@ -22,24 +22,24 @@ public class OrderAdd extends HttpServlet {
         //获取订单新建者，订单箱柜，使用开始时间，使用结束时间，订单设定温度，订单设定是否杀菌
         String jsonstring = request.getParameter("jsonstring");
 
-        String result = "";
+//        String result = "";
 
         OrderDAo orderDAo = new OrderDAo();
 
         Order o = (Order) JSON.parseObject(jsonstring, Order.class);
 
-        boolean flag = orderDAo.orderadd(o);
+        String number = orderDAo.orderadd(o);
         PrintWriter out = response.getWriter();//回应请求
-        if(flag){
-            result = "success";
-        }
-        else {
-            result = "fail";
-        }
-        out.write(result);
+//        if(number.equals("fail")){
+//            result = "fail";
+//        }
+//        else {
+//            result = number;
+//        }
+        out.write(number);
         out.flush();
         out.close();
-        System.out.println(result);
+        System.out.println(number);
     }
 
     @Override

@@ -78,4 +78,20 @@
         <servlet-name>GetOrderInfo</servlet-name>
         <url-pattern>/getorderinfo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>FinishOrder</servlet-name>
+        <servlet-class>com.demo.service.FinishOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FinishOrder</servlet-name>
+        <url-pattern>/finishorder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteOrder</servlet-name>
+        <servlet-class>com.demo.service.DeleteOrder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteOrder</servlet-name>
+        <url-pattern>/deleteorder</url-pattern>
+    </servlet-mapping>
 </web-app>
