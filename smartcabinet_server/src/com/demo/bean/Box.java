@@ -7,6 +7,7 @@ public class Box {
     public String box_owner;
     public String box_status;
     public String box_sterilization;
+    public String box_qrcode;
 
     public String getBox_number() {
         return box_number;
@@ -56,4 +57,11 @@ public class Box {
         this.box_sterilization = box_sterilization;
     }
 
+    public String getBox_qrcode() {
+        return box_qrcode;
+    }
+
+    public void setBox_qrcode(String box_qrcode) {
+        this.box_qrcode = box_qrcode;
+    }
 }

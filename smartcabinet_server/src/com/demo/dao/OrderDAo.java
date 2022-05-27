@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONString;
 
+import javax.swing.*;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
@@ -179,12 +180,13 @@ public class OrderDAo {
 
         try {
             connection = JdbcUtils.getconn();
-            String sql = "update box set box_temp = ?, box_lock = ?, box_sterilization = ? where box_number = ?;";
+            String sql = "update box set box_temp = ?, box_lock = ?, box_sterilization = ?, box_qrcode = ? where box_number = ?;";
             preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
             preparedStatement.setString(1,box.getBox_temp());
             preparedStatement.setString(2,box.getBox_lock());
             preparedStatement.setString(3,box.getBox_sterilization());
-            preparedStatement.setString(4,"1010");
+            preparedStatement.setString(4,box.getBox_qrcode());
+            preparedStatement.setString(5,"1010");
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -265,7 +267,7 @@ public class OrderDAo {
     }
 
     public String unlockcheck (com.alibaba.fastjson.JSONObject unlockcheck){
-        String box = unlockcheck.getString("box");
+        String qrcode = unlockcheck.getString("box");
         String user = unlockcheck.getString("user");
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -274,30 +276,72 @@ public class OrderDAo {
 
         try {
             connection = JdbcUtils.getconn();
-            String sql = "select order_number, order_status from orders where order_box_number = ? and order_creator = ? and order_status <> ?;";
-            preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
-            preparedStatement.setString(1,box);
-            preparedStatement.setString(2,user);
-            preparedStatement.setString(3,"finish");
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
-                String order_number = resultSet.getString("order_number");
-                String order_status = resultSet.getString("order_status");
-                if (order_status.equals("unlock")) {
-                    result = "already unlock";//查询结果为unlock
+            String box;
+            if (user.equals("1000000001")){ // 管理员
+                box = qrcode.substring(0, 4);
+                String sql = "select order_number, order_status from orders where order_box_number = ? and order_creator = ? and order_status <> ?;";
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,box);
+                preparedStatement.setString(2,user);
+                preparedStatement.setString(3,"finish");
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()){
+                    String order_number = resultSet.getString("order_number");
+                    String order_status = resultSet.getString("order_status");
+                    if (order_status.equals("unlock")) {
+                        result = "already unlock";//查询结果为unlock
+                    }
+                    else {//查询结果为booking，using
+                        sql = "update orders set order_status = ? where order_number = ?;";
+                        preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
+                        preparedStatement.setString(1,"unlock");
+                        preparedStatement.setString(2,order_number);
+                        preparedStatement.executeUpdate();
+                        result = "unlock";
+                    }
                 }
-                else {//查询结果为booking，using
-                    sql = "update orders set order_status = ? where order_number = ?;";
-                    preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
-                    preparedStatement.setString(1,"unlock");
-                    preparedStatement.setString(2,order_number);
-                    preparedStatement.executeUpdate();
-                    result = "unlock";
+                else{//查询没有结果，说明为finish或者没有
+                    result = "not exist";
                 }
             }
-            else{//查询没有结果，说明为finish或者没有
-                result = "not exist";
+            else {
+                box = qrcode.substring(0, 4);
+                String sql = "select box_qrcode from box where box_number = ?;";
+                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                preparedStatement.setString(1,box);
+                resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()){
+                    if (qrcode.equals(resultSet.getString("box_qrcode"))){
+                        sql = "select order_number, order_status from orders where order_box_number = ? and order_creator = ? and order_status <> ?;";
+                        preparedStatement = (PreparedStatement)connection.prepareStatement(sql);//组装sql语句
+                        preparedStatement.setString(1,box);
+                        preparedStatement.setString(2,user);
+                        preparedStatement.setString(3,"finish");
+                        resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()){
+                            String order_number = resultSet.getString("order_number");
+                            String order_status = resultSet.getString("order_status");
+                            if (order_status.equals("unlock")) {
+                                result = "already unlock";//查询结果为unlock
+                            }
+                            else {//查询结果为booking，using
+                                sql = "update orders set order_status = ? where order_number = ?;";
+                                preparedStatement = (PreparedStatement)connection.prepareStatement(sql);
+                                preparedStatement.setString(1,"unlock");
+                                preparedStatement.setString(2,order_number);
+                                preparedStatement.executeUpdate();
+                                result = "unlock";
+                            }
+                        }
+                        else{//查询没有结果，说明为finish或者没有
+                            result = "not exist";
+                        }
+                    }
+                    else { result = "not exist"; }
+                }
+                else { result = "not exist"; }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

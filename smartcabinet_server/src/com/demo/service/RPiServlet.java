@@ -23,10 +23,12 @@ public class RPiServlet extends HttpServlet { //树莓派控制
         String temp = request.getParameter("temp");
         String ster = request.getParameter("ster");
         String lock = request.getParameter("lock");
+        String qrnumber = request.getParameter("qrnumber");
         Box box = new Box();
         box.setBox_temp(temp);
         box.setBox_sterilization(ster);
         box.setBox_lock(lock);
+        box.setBox_qrcode(qrnumber);
 
         OrderDAo orderDAo = new OrderDAo();
 
